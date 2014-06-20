@@ -1,0 +1,7 @@
+Alias /phpmyadmin /usr/share/phpMyAdmin
+Alias /phpMyAdmin /usr/share/phpMyAdmin
+
+<Directory /usr/share/phpMyAdmin/>
+Order allow,deny
+Allow from all
+</Directory>

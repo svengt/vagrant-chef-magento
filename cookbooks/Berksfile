@@ -1,0 +1,8 @@
+source "https://api.berkshelf.com"
+
+cookbook 'python'
+cookbook 'apache2'
+cookbook 'mysql', git: 'git://github.com/opscode-cookbooks/mysql.git'
+cookbook 'openssl'
+cookbook 'php'
+cookbook 'yum-epel'
