@@ -1,4 +1,4 @@
-Vagrant web base (Django, PHP, Apache, MySQL)
+Vagrant web base
 ================
 
 Vagrant basic web setup (Django, PHP, Apache, MySQL)
