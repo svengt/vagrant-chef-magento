@@ -1,4 +1,4 @@
-Vagrant web base
+Vagrant Chef Django
 ================
 
 Vagrant basic web setup (Django, PHP, Apache, MySQL)
