@@ -67,7 +67,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   ## YUM
   # PHPMyAdmin
-  config.vm.provision :shell, :inline => "yum install -y phpmyadmin; echo 'Alias /phpmyadmin /usr/share/phpMyAdmin\nAlias /phpMyAdmin /usr/share/phpMyAdmin\n\n<Directory /usr/share/phpMyAdmin/>\nOrder allow,deny\nAllow from all\n</Directory>' > /etc/httpd/sites-enabled/phpmyadmin"
+  config.vm.provision :shell, :inline => "yum install -y phpmyadmin; echo 'Alias /phpmyadmin /usr/share/phpMyAdmin\nAlias /phpMyAdmin /usr/share/phpMyAdmin\n\n<Directory /usr/share/phpMyAdmin/>\nOrder allow,deny\nAllow from all\n</Directory>' > /etc/httpd/sites-enabled/phpmyadmin.conf"
   # libjpeg
   config.vm.provision :shell, :inline => "yum install -y libjpeg-devel"
 
