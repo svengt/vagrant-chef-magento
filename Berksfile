@@ -1,5 +1,6 @@
 source "https://api.berkshelf.com"
 
+cookbook 'git'
 cookbook 'python'
 cookbook 'apache2'
 cookbook 'mysql'

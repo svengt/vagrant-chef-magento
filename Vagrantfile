@@ -20,11 +20,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
-  config.vm.network "forwarded_port", guest: 80, host: 8080
   config.vm.network "forwarded_port", guest: 8000, host: 8001
+  config.vm.network "forwarded_port", guest: 80, host: 8080
   
   # Sync src
-  config.vm.synced_folder "src", "/home/vagrant/src", create: true
+  config.vm.synced_folder "src", "/vagrant/src", create: true
   # Sync vhosts
   config.vm.synced_folder "vhosts", "/etc/httpd/sites-enabled"
   
@@ -35,6 +35,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "chef_solo" do |chef|
     chef.add_recipe "yum"
     chef.add_recipe "yum-epel"
+    chef.add_recipe "git"
     chef.add_recipe "build-essential"
     chef.add_recipe "python"
     chef.add_recipe "mysql::client"
@@ -45,10 +46,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # chef.add_recipe "php::module_apc"
     chef.add_recipe "php::module_curl"
     chef.add_recipe "php::module_mysql"
-    
+
     chef.add_recipe "apache2"
-    chef.add_recipe "apache2::mod_wsgi"
     chef.add_recipe "apache2::mod_php5"
+    chef.add_recipe "apache2::mod_wsgi"
     
     chef.json = {
       :apache => { :default_site_enabled => false },
@@ -63,11 +64,22 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Default DB setup
   config.vm.provision :shell, :inline => "mysql -u root -p#{$mysql_root_password} -e \"create database if not exists dev_db\""
   config.vm.provision :shell, :inline => "mysql -u root -p#{$mysql_root_password} -e \"GRANT ALL ON dev_db.* TO 'dev_user'@'localhost' IDENTIFIED BY '#{$mysql_user_password}'; FLUSH PRIVILEGES;\""
-  
+
+  ## YUM
   # PHPMyAdmin
-  config.vm.provision :shell, :inline => "sudo yum install -y phpmyadmin; echo 'Alias /phpmyadmin /usr/share/phpMyAdmin\nAlias /phpMyAdmin /usr/share/phpMyAdmin\n\n<Directory /usr/share/phpMyAdmin/>\nOrder allow,deny\nAllow from all\n</Directory>' > /etc/httpd/sites-enabled/phpmyadmin; sudo service httpd restart"
-  
+  config.vm.provision :shell, :inline => "yum install -y phpmyadmin; echo 'Alias /phpmyadmin /usr/share/phpMyAdmin\nAlias /phpMyAdmin /usr/share/phpMyAdmin\n\n<Directory /usr/share/phpMyAdmin/>\nOrder allow,deny\nAllow from all\n</Directory>' > /etc/httpd/sites-enabled/phpmyadmin"
+  # libjpeg
+  config.vm.provision :shell, :inline => "yum install -y libjpeg-devel"
+
   # Application provision
-  config.vm.provision :shell, :inline => "pip install -r ./src/requirements.txt", run: "always"
+  config.vm.provision :shell, :inline => "pip install -r /vagrant/src/requirements.txt", run: "always"
+
+  # Django
+  config.vm.provision :shell, run: "always", :inline => <<-SH
+    export APPLICATION_ENV=development
+    python /vagrant/src/manage.py syncdb --noinput --migrate
+  SH
+
+  config.vm.provision :shell, :inline => "service httpd restart", run: "always"
   
 end
