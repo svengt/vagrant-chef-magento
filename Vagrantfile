@@ -20,7 +20,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
-  config.vm.network "forwarded_port", guest: 8000, host: 8001
   config.vm.network "forwarded_port", guest: 80, host: 8080
   
   # Sync src
@@ -40,7 +39,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.add_recipe "python"
     chef.add_recipe "mysql::client"
     chef.add_recipe "mysql::server"
-    # chef.add_recipe "apache2::mod_rewrite"
+    chef.add_recipe "apache2::mod_rewrite"
     chef.add_recipe "openssl"
     chef.add_recipe "php"
     # chef.add_recipe "php::module_apc"
@@ -71,14 +70,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # libjpeg
   config.vm.provision :shell, :inline => "yum install -y libjpeg-devel"
 
-  # Application provision
-  config.vm.provision :shell, :inline => "pip install -r /vagrant/src/requirements.txt", run: "always"
-
   # Django
-  config.vm.provision :shell, run: "always", :inline => <<-SH
-    export APPLICATION_ENV=development
-    python /vagrant/src/manage.py syncdb --noinput --migrate
-  SH
+  # config.vm.provision :shell, run: "always", :inline => <<-SH
+  #   export APPLICATION_ENV=development
+  #   python /vagrant/src/manage.py syncdb --noinput --migrate
+  # SH
 
   config.vm.provision :shell, :inline => "service httpd restart", run: "always"
   

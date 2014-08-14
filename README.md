@@ -1,7 +1,7 @@
-Vagrant Chef Django
+Vagrant Chef Magento
 ================
 
-Vagrant basic web setup (Django, PHP, Apache, MySQL)
+Vagrant basic web setup for Magento (PHP, Apache, MySQL)
 
 Uses berkshelf vagrant plugin for chef cookbooks `vagrant plugin install vagrant-berkshelf --plugin-version '>= 2.0.1'`
 
