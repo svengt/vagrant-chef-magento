@@ -1,0 +1,33 @@
+# General web stuff
+# /.htaccess
+/robots.txt
+/sitemap.xml
+
+.ftpquota
+error_log
+
+# Dynamic Magento data that doesn't need to be in the repo
+/api/cache/*
+/var/*
+/media/*
+/downloader/.cache/*
+/downloader/pearlib/cache/*
+/downloader/pearlib/download/*
+/app/etc/use_cache.ser
+/app/etc/local.xml
+/errors/local.xml
+
+# Explicitly mark as "do not exclude/ignore these from GIT repository"
+!/app/.htaccess
+!/app/etc/.htaccess
+!/downloader/.htaccess
+!/downloader/template/.htaccess
+!/errors/.htaccess
+!/includes/.htaccess
+!/lib/.htaccess
+!/media/.htaccess
+!/media/customer/.htaccess
+!/media/downloadable/.htaccess
+!/pkginfo/.htaccess
+!/var/.htaccess
+!var/package/
